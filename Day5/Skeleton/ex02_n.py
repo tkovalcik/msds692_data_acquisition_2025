@@ -7,10 +7,21 @@ app = FastAPI()
 items = {}  # In-memory database
 
 
-class Item(BaseModel):
+class Student(BaseModel):
     name: str
-    price: float
-    instock_qt: int = 0
+    email: str
+    age: int | None = None
+
+@app.post("/add_student")
+def create_student(student: Student):
+    return {"name":student.name,
+            "email":student.email,
+            "age":student.age}
+
+# requests.post("url/add_student",
+#               data = {"name": "PJ",
+#                       "email": "pjmask@gmail.com"})
+
 
 
 @app.post("/add_items/")
