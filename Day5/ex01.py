@@ -20,8 +20,13 @@ def read_item_w_path_param(item_id: int):
 @app.get("/items/")
 def read_item_w_query_param(item_id: int | None = None, ct: int = 0):
     return {"item_id": item_id, "count": ct}
+# item_id not req'd since None = None
+# ct also not req'd since it has a default value defined
 
 
 @app.get("/name")
 def return_name(name: str):
     return {"name": name}
+
+@app.post("/items")
+def return_items()

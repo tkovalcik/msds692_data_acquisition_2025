@@ -1,22 +1,20 @@
-# Use continuumio/miniconda3 as a base image 
+# Define a base image
 FROM continuumio/miniconda3
 
-# Set /Day6 as a working directory
-WORKDIR /Day6
+# Create (mkdir) /ex01 and cd /ex01 on your image
+WORKDIR /ex01
 
-# Copy environment.yml
+# Copy everything from current directory to working directory
 COPY * .
 
-# create an environment using environment.yml
-RUN conda env create -f environment.yml -n ex01
+# Create a conda virtual environment
+RUN conda env create -n ex01 -f environment.yml
 
-# install fastapi[standard] for fastapi's cli on the environment
-RUN conda install -n ex01  fastapi[standard] 
+# Install fastAPI clip in the environment
+RUN conda install -n ex01 fastapi[standard]
 
-# expose port 8000
+# Expose port 8000 for fastapi
 EXPOSE 8000
 
-# run the ex01.py as fastapi server.
-#CMD ["conda", "run", "--no-capture-output", "-n", "ex01", "fastapi", "dev", "ex01.py", "--port=8000", "--host=0.0.0.0"]
-#CMD ["conda", "run", "--no-capture-output", "-n", "ex01", "fastapi", "dev", "ex01.py"]
-CMD ["conda", "run", "--no-capture-output", "-n", "ex01", "fastapi", "dev", "ex01.py", "--port=8000", "--host=0.0.0.0"]
+# Run fastapi server "fastapi dev ex01.py" cli command
+CMD ["conda", "run", "-n", "ex01", "fastapi", "dev", "ex01.py"]
