@@ -9,27 +9,25 @@ from job_posting import retrieve_data_from_gcs
 
 load_dotenv()
 
-
-gcs_data = retrieve_data_from_gcs(service_account_key=service_account_file_path,
-                                  project_id=project_id,
-                                  bucket_name=bucket_name,
-                                  file_name_prefix=file_name_prefix)
-system_message = f"""
-Assume that you are a helpful job search assistant. 
-You have access to the following job postings data:
-{gcs_data}. 
-Based on this information, help the user with their job search related questions.
-"""
-print(system_message)
-genai.configure(api_key=gemini_api_key)
-model = genai.GenerativeModel("gemini-2.5-flash",
-                              system_instruction=system_message)
-
 st.set_page_config(page_title="Chatbot")
 st.title("Job Assistant Chatbot")
 
 # This is for maintaining the chat history
 if "chat" not in st.session_state:
+    gcs_data = retrieve_data_from_gcs(service_account_key=service_account_file_path,
+                                      project_id=project_id,
+                                      bucket_name=bucket_name,
+                                      file_name_prefix=file_name_prefix)
+    system_message = f"""
+    Assume that you are a helpful job search assistant. 
+    You have access to the following job postings data:
+    {gcs_data}. 
+    Based on this information, help the user with their job search related questions.
+    """
+    genai.configure(api_key=gemini_api_key)
+    model = genai.GenerativeModel("gemini-2.5-flash",
+                                  system_instruction=system_message)
+
     chat = model.start_chat(history=[])
     st.session_state.chat = chat
 else:

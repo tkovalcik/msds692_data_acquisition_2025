@@ -11,20 +11,19 @@ load_dotenv()
 
 # add retrieve_data_from_gcs() to retrieve data from the bucket
 # and use it to create a system message.
-system_message = """
-
-"""
-
-
-genai.configure(api_key=gemini_api_key)
-model = genai.GenerativeModel("gemini-2.5-flash",
-                              system_instruction=system_message)
 
 st.set_page_config(page_title="Chatbot")
 st.title("Job Assistant Chatbot")
 
 # This is for maintaining the chat history
 if "chat" not in st.session_state:
+    system_message = """
+
+    """
+    genai.configure(api_key=gemini_api_key)
+    model = genai.GenerativeModel("gemini-2.5-flash",
+                                  system_instruction=system_message)
+
     chat = model.start_chat(history=[])
     st.session_state.chat = chat
 else:
