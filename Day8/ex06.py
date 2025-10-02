@@ -17,6 +17,7 @@ async def retrieve_content(playwright: Playwright, website_url: str) -> dict:
     browser = await chromium.launch()
     page = await browser.new_page()
     await page.goto(website_url)
+    await page.screenshot(path="screenshot.png")
 
     genre_data = defaultdict(list)
     time = page.locator('time').first
@@ -87,12 +88,12 @@ async def main():
         h2_li_data = await retrieve_content(playwright,
                                             "https://www.nytimes.com/books/best-sellers/")
 
-    for key, value in h2_li_data.items():
-        if key != "Date":
-            for item in value:
-                url = item["bookshop_url"]
-                bookshop_ebook_price = await retrieve_bookshop_price(url, "Ebook")
-                item["bookshop_ebook_price"] = bookshop_ebook_price
+    # for key, value in h2_li_data.items():
+    #     if key != "Date":
+    #         for item in value:
+    #             url = item["bookshop_url"]
+    #             bookshop_ebook_price = await retrieve_bookshop_price(url, "Ebook")
+    #             item["bookshop_ebook_price"] = bookshop_ebook_price
 
     with open("output.json", "w") as f:
         json.dump(h2_li_data, f, indent=4)
